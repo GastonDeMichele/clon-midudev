@@ -1,0 +1,123 @@
+---
+import Layout from '@layouts/Layout.astro'
+
+import theme from '../../../src/theme.js'
+
+import CopyIcon from '@components/icons/copy.astro'
+
+const { animation } = theme
+---
+
+<Layout
+  title='midudev Tailwind CSS Animations Plugin: Community-Powered Animation Magic'
+>
+  <wc-toast></wc-toast>
+  <main class='pb-20'>
+    <header
+      class='max-w-4xl mx-auto flex items-center justify-center py-10 flex-col'
+    >
+      <span
+        class='inline-flex justify-center items-center rounded bg-black/10 font-medium px-2 py-1 text-xs'
+        >v.0.0.4</span
+      >
+      <h1 class='font-semibold text-4xl'>tailwind css animations</h1>
+      <h2 class='font-medium opacity-70'>the plugin that you need! =)</h2>
+      <div class='mt-10'>
+        <div
+          class='flex text-center items-center w-full max-w-md pl-4 pr-1 py-1 bg-black/50 backdrop-blur text-white rounded-full gap-x-2'
+        >
+          <pre
+            class='text-sm flex'>
+            <code>npm install @midudev/tailwind-animations</code>
+          </pre>
+          <button
+            id='copyNpmInstall'
+            class='inline-flex items-center justify-center whitespace-nowrap rounded-full bg-white/10 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none size-7'
+          >
+            <CopyIcon />
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section
+      class='px-4 max-w-4xl m-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4'
+    >
+      {
+        Object.keys(animation).map((animationKey) => {
+          return (
+            <article
+              class='animate-duration-1000 col-span-1 border rounded border-gray-200 hover:border-gray-400 hover:shadow transition-colors cursor-crosshair relative bg-white/10 backdrop-blur-sm'
+              data-class={animationKey}
+            >
+              <div class='p-4 flex gap-4 items-center justify-center flex-col w-full h-full'>
+                <span class='w-16 h-16 bg-zinc-600 rounded-md flex items-center justify-center' />
+                <p class='font-semibold text-sm opacity-80'>{animationKey}</p>
+              </div>
+              <button class='absolute top-2 right-2'>
+                <CopyIcon />
+              </button>
+            </article>
+          )
+        })
+      }
+    </section>
+
+    <footer
+      class='max-w-2xl text-sm pt-20 pb-10 mx-auto text-center px-4 opacity-60 flex justify-center items-center'
+    >
+      <p>
+        Based on <a
+          href='https://animation.ibelick.com/'
+          target='_blank'
+          rel='noopener noreferrer'>Julien Thibeaut Tailwind animations</a
+        >
+      </p>
+    </footer>
+  </main>
+</Layout>
+
+<script>
+  import { toast } from 'wc-toast'
+
+  const $articles = document.querySelectorAll('article')
+
+  $articles.forEach(($article) => {
+    const animationKey = $article.getAttribute('data-class')
+    const animationClass = `animate-${animationKey}`
+    const $box = $article.querySelector('span')
+
+    if ($box == null) return
+
+    $article.addEventListener('mouseenter', () => {
+      $box.classList.add(animationClass)
+    })
+
+    $article.addEventListener('mouseleave', () => {
+      $box.classList.remove(animationClass)
+    })
+
+    $article.addEventListener('click', () => {
+      navigator.clipboard.writeText(animationClass)
+      toast('Copied to clipboard!', {
+        theme: {
+          type: 'light'
+        }
+      })
+    })
+  })
+
+  const $copyNpmInstall = document.getElementById(
+    'copyNpmInstall'
+  ) as HTMLButtonElement
+
+  $copyNpmInstall.addEventListener('click', () => {
+    const npmCommand = 'npm install @midudev/tailwind-animations'
+    navigator.clipboard.writeText(npmCommand)
+    toast('Copied to clipboard!', {
+      theme: {
+        type: 'light'
+      }
+    })
+  })
+</script>
